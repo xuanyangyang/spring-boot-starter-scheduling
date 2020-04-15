@@ -6,8 +6,6 @@ import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import scheduling.DefaultScheduledService;
 import scheduling.ScheduledService;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -37,11 +35,5 @@ public class SchedulingAutoConfiguration {
     @ConditionalOnMissingBean(ScheduledBeanPostProcessor.class)
     public ScheduledBeanPostProcessor scheduledBeanPostProcessor() {
         return new ScheduledBeanPostProcessor();
-    }
-
-    public static void main(String[] args) {
-        LocalDateTime localDateTime = LocalDateTime.now().plusDays(2);
-        long toEpochMilli = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        System.out.println(toEpochMilli);
     }
 }

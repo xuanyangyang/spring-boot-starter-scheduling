@@ -67,8 +67,4 @@ public class ScheduledBeanPostProcessor implements BeanPostProcessor {
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) {
-
-    }
 }
