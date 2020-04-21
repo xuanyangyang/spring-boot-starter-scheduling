@@ -5,7 +5,7 @@
 <dependency>
     <groupId>io.github.xuanyangyang</groupId>
     <artifactId>spring-boot-starter-scheduling</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1.1</version>
 </dependency>
 ```
 
