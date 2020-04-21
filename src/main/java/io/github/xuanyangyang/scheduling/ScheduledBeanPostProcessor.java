@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import scheduling.ScheduledService;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -63,8 +62,8 @@ public class ScheduledBeanPostProcessor implements BeanPostProcessor {
     private void taskAction(Object obj, Method method) {
         try {
             method.invoke(obj);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.getCause().printStackTrace();
         }
     }
 }
