@@ -1,6 +1,7 @@
 package io.github.xuanyangyang.scheduling;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
@@ -13,18 +14,26 @@ import java.util.concurrent.Executors;
  * @author xuanyangyang
  * @since 2020/3/27 17:37
  */
+@EnableConfigurationProperties(SchedulingProperties.class)
 public class SchedulingAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(name = "scheduledAsyncExecutor")
-    public Executor scheduledAsyncExecutor() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new CustomizableThreadFactory("异步调度线程"));
+    public Executor scheduledAsyncExecutor(SchedulingProperties schedulingProperties) {
+        return Executors.newFixedThreadPool(schedulingProperties.getPool().getAsyncPoolSize(), new CustomizableThreadFactory("异步调度线程"));
     }
 
     @Bean
     @ConditionalOnMissingBean(ScheduledService.class)
-    public ScheduledService scheduledService(Executor scheduledAsyncExecutor) {
-        ScheduledService scheduledService = new DefaultScheduledService(scheduledAsyncExecutor);
+    public ScheduledService scheduledService(Executor scheduledAsyncExecutor, SchedulingProperties schedulingProperties) {
+        SchedulingProperties.Refresh refresh = schedulingProperties.getRefresh();
+        ScheduledService scheduledService = new DefaultScheduledService(
+                schedulingProperties.getPool().getThreadNamePrefix(),
+                scheduledAsyncExecutor,
+                refresh.isEnable(),
+                refresh.getDelay(),
+                refresh.getPeriod(),
+                refresh.getThreshold());
         scheduledService.start();
         return scheduledService;
     }

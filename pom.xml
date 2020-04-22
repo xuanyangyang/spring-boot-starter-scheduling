@@ -5,18 +5,22 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>io.github.xuanyangyang</groupId>
-        <version>0.0.1</version>
+        <version>0.1.0</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-boot-starter-scheduling</artifactId>
-    <version>0.0.1.2</version>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
 
         <dependency>
