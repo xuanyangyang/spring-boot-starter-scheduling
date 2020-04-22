@@ -20,7 +20,8 @@ public class SchedulingAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "scheduledAsyncExecutor")
     public Executor scheduledAsyncExecutor(SchedulingProperties schedulingProperties) {
-        return Executors.newFixedThreadPool(schedulingProperties.getPool().getAsyncPoolSize(), new CustomizableThreadFactory("异步调度线程"));
+        SchedulingProperties.Pool pool = schedulingProperties.getPool();
+        return Executors.newFixedThreadPool(pool.getAsyncPoolSize(), new CustomizableThreadFactory(pool.getAsyncThreadNamePrefix()));
     }
 
     @Bean
