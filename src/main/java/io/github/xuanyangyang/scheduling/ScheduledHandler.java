@@ -1,24 +1,42 @@
 package io.github.xuanyangyang.scheduling;
 
-import org.springframework.beans.BeansException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import scheduling.ScheduledService;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 
 import java.lang.reflect.Method;
 
 /**
- * 调度bean处理器
+ * {@link Scheduled}处理器
  *
  * @author xuanyangyang
- * @since 2020/3/31 15:37
+ * @since 2020/4/22 11:09
  */
-public class ScheduledBeanPostProcessor implements BeanPostProcessor {
+public class ScheduledHandler {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private ScheduledService scheduledService;
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    @EventListener
+    public void handleApplicationStartedEvent(ApplicationStartedEvent event) {
+        String[] names = applicationContext.getBeanDefinitionNames();
+        for (String name : names) {
+            Object bean = applicationContext.getBean(name);
+            handleBean(bean);
+        }
+    }
+
+    /**
+     * 处理bean
+     *
+     * @param bean bean
+     */
+    public void handleBean(Object bean) {
         Method[] methods = bean.getClass().getDeclaredMethods();
         for (Method method : methods) {
             Scheduled scheduled = method.getAnnotation(Scheduled.class);
@@ -56,14 +74,19 @@ public class ScheduledBeanPostProcessor implements BeanPostProcessor {
                 scheduledService.addTask(name, cron, action, scheduled.async());
             }
         }
-        return bean;
     }
 
+    /**
+     * 任务载体
+     *
+     * @param obj    对象
+     * @param method 任务调用的方法
+     */
     private void taskAction(Object obj, Method method) {
         try {
             method.invoke(obj);
         } catch (Exception e) {
-            e.getCause().printStackTrace();
+            logger.error("运行定时任务失败", e.getCause());
         }
     }
 }

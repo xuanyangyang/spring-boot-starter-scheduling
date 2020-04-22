@@ -3,8 +3,6 @@ package io.github.xuanyangyang.scheduling;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
-import scheduling.DefaultScheduledService;
-import scheduling.ScheduledService;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -26,14 +24,13 @@ public class SchedulingAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(ScheduledService.class)
     public ScheduledService scheduledService(Executor scheduledAsyncExecutor) {
-        DefaultScheduledService scheduledService = new DefaultScheduledService(scheduledAsyncExecutor);
-        scheduledService.init();
+        ScheduledService scheduledService = new DefaultScheduledService(scheduledAsyncExecutor);
+        scheduledService.start();
         return scheduledService;
     }
 
     @Bean
-    @ConditionalOnMissingBean(ScheduledBeanPostProcessor.class)
-    public ScheduledBeanPostProcessor scheduledBeanPostProcessor() {
-        return new ScheduledBeanPostProcessor();
+    public ScheduledHandler scheduledHandler() {
+        return new ScheduledHandler();
     }
 }

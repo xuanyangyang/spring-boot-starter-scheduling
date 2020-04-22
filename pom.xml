@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-boot-starter-scheduling</artifactId>
-    <version>0.0.1.1</version>
+    <version>0.0.1.2</version>
 
     <dependencies>
         <dependency>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.github.xuanyangyang</groupId>
             <artifactId>scheduling</artifactId>
-            <version>0.0.1.1</version>
+            <version>0.0.1.2</version>
         </dependency>
     </dependencies>
 </project>
